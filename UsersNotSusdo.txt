@@ -1,0 +1,11 @@
+Question 2:Create a user in your localhost, which should not be able to execute the sudo command.
+
+Step 1:Open a terminal
+
+Step 2:Add a new user 
+
+	sudo adduser new_username
+	
+	Add password for your new_username
+	
+Now this user cannot run any sudo commands .

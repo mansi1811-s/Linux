@@ -1,0 +1,114 @@
+
+Question 1:Configure smtp in localhost.
+
+Step 1:To update latest the existing packages in the system .
+	sudo apt update
+
+Step 2:To install postfix
+	a)use the following command 
+	sudo apt install postfix
+	
+	b)During installation of postfix ,we will get a screen stating Postfix configuration PRESS OK
+	
+	c)Then next comes "General type of mail configuration"
+	Select "Internet Site" and PRESS OK
+	
+Step 3:For configuring the hostname with the desired domain name ,we need to update the hostname in the configuration file .
+      a)First open the the configuration file ,which exixts in /etc/postfix folder with any text editor of your choice 
+      
+      nano /etc/postfix/main.cf
+      
+      b)Then configuration file will be opened ,wherein we will change the value of hostanme 
+      
+      myhostname = mansi.singh.com
+      
+      c)change the value inet_interfaces,so that Postfix only listen for incoming SMTP connections on the loopback interface. 
+      
+      inet_interfaces=loopback-only
+      
+      d)in mydestination add the value of myhostname 
+      
+      mydestination=$myhostname , mansi.singh.com , localhost.singh.com , , localhost
+      
+Step 3:Open file /etc/hosts and add myhostname 
+	
+	127.0.0.1 localhost mansi.singh.com
+	127.0.1.1 mansi.singh.com
+
+Step 4:Define the email address.
+
+	a)open /etc/aliases file
+	
+	sudo nano /etc/aliases
+	
+	b)then define the email address
+	
+	postmaster: root
+	root: your gmail id
+
+Step 4:set your mailname 
+ 
+	a)open and create mailname
+	
+	sudo nano /etc/mailname
+	
+	b) add your mailname in the file 
+
+Step 5:To configure SMTP username and password 
+	
+	a)we need to open and create a file named sasl_passwd
+	
+	sudo nano /etc/postfix/sasl_passwd
+	
+	b)Then under sasl_passwd we need to add SMTP host ,username and the password .
+	
+	[smtp.gmail.com]:587 username:password
+	
+Step 6:Create a hash file for postfix using postmap command
+	sudo postmap /etc/postfix/sasl_passwd
+	
+Step 6:The sasl_passwd file conatins the username and password ,so we will change the file ownership and permission to root by using the following commands
+	
+	sudo chown root:root /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
+	sudo chmod 0600 /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
+	
+Step 7:Configure relay host 
+
+	a)open configuration file 
+	
+	sudo nano /etc/postfix/main.cf
+	
+	b)add the following in relayhost
+	
+	relayhost= [smtp.gmail.com]:587
+
+Step 8:Adding the following to customize the configuration 
+	a)to enable SASL authentication
+	smtp_sasl_auth_enable = yes
+	
+	b)to disallow methods that allow anonymous authentication.
+	smtp_sasl_security_options = noanonymous
+	
+	c)to specify path to sasl_passwd file
+	smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+	
+	d)To establish a secure and encrypted connection between mail servers ,we will enable STARTTLS(Secure Transport Layer 		 Security) encryption
+	smtp_use_tls = yes
+	
+	e)to specify the path of CA certificates
+	smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+
+Step 9:Enable and start postfix
+	sudo systemctl enable postfix
+  	sudo systemctl start postfix
+  	
+Start 10:send the mail to desired mail id
+
+	echo "Body of the email" | mail -s "The subject line" email_address
+
+
+	
+	
+
+
+      

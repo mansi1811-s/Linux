@@ -1,0 +1,22 @@
+Question 5:Configure your system in such a way that any user of your system creates a file then there should not be permission to do any activity in that file.
+
+	In order to do this we need to change the value of umask from default 002 to 777 by adding umask value in bash.bashrc file which is located in /etc folder
+	
+	a)open a terminal 
+	
+	b)go to /etc folder by using following command
+	
+		cd /etc
+	
+	c)now open bash.bashrc file by using any text editor
+	
+		nano bash.bashrc
+		
+	d)add umask value at the end of the file 
+	
+		umask 777
+		
+	e)save the file and exit
+	
+	
+Now if we create a file then we cannot read ,write or execute that file .If we try to write in that file it will give "permission denied"

@@ -1,0 +1,73 @@
+Question 6:Create a service with the name showtime , after starting the service, every minute it should print the current time in a file in the user home directory.
+
+
+Ex:-
+sudo service showtime start   -> It should start writing in file.
+sudo service showtime stop   -> It should stop writing in file.
+sudo service showtime status -> It should show status.
+
+
+Step 1:open terminal and create a script file "showtime.sh"
+	
+	Under showtime.sh write the following lines
+	
+	#!/bin/bash
+
+	while true; do
+        	date "+%Y-%m-%d %H:%M:%S" >> "home/sigmoid/showtime.log"
+        sleep 60
+	done
+
+Step 2:Make the script "showtime.sh" executable by using the following command
+	
+	chmod +x showtime.sh
+	
+Step 3:Create the service called showtime.service in /etc/systemd/system/showtime.sh
+
+	[Unit]
+	Description=Showtime Service
+	After=network.target
+
+	[Service]
+	Type=simple
+	User=sigmoid
+	ExecStart=/usr/bin/showtime.sh
+	Restart=always
+
+	[Install]
+	WantedBy=multi-user.target
+	
+	Save it and close
+	
+Step 4:To reload the entire systemd unit files use the following command
+
+	sudo systemctl daemon-reload
+	
+Step 5:Start the showtime service by using the following command
+
+	sudo systemctl start showtime.service
+			  OR
+	sudo service showtime start
+	
+Step 6:To know the status of the service use the following command
+
+	sudo systemctl status showtime.sh
+			  OR
+	sudo service showtime status
+	
+Step 7:We can check whether our service is working properly by checking our log file
+
+	cat showtime.log
+	
+	If there are entries of day,date and time then it means our service is working successfully 
+	
+Step 8:To stop the service use one of the following command
+
+	sudo systemctl stop showtime.service
+		  OR
+	sudo service showtime stop
+
+
+
+
+	
