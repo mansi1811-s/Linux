@@ -2,9 +2,11 @@
 Question 1:Configure smtp in localhost.
 
 Step 1:To update latest the existing packages in the system .
+
 	sudo apt update
 
 Step 2:To install postfix
+
 	a)use the following command 
 	sudo apt install postfix
 	
@@ -14,6 +16,7 @@ Step 2:To install postfix
 	Select "Internet Site" and PRESS OK
 	
 Step 3:For configuring the hostname with the desired domain name ,we need to update the hostname in the configuration file .
+
       a)First open the the configuration file ,which exixts in /etc/postfix folder with any text editor of your choice 
       
       nano /etc/postfix/main.cf
@@ -65,6 +68,7 @@ Step 5:To configure SMTP username and password
 	[smtp.gmail.com]:587 username:password
 	
 Step 6:Create a hash file for postfix using postmap command
+
 	sudo postmap /etc/postfix/sasl_passwd
 	
 Step 6:The sasl_passwd file conatins the username and password ,so we will change the file ownership and permission to root by using the following commands
@@ -83,6 +87,7 @@ Step 7:Configure relay host
 	relayhost= [smtp.gmail.com]:587
 
 Step 8:Adding the following to customize the configuration 
+
 	a)to enable SASL authentication
 	smtp_sasl_auth_enable = yes
 	
@@ -92,13 +97,14 @@ Step 8:Adding the following to customize the configuration
 	c)to specify path to sasl_passwd file
 	smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
 	
-	d)To establish a secure and encrypted connection between mail servers ,we will enable STARTTLS(Secure Transport Layer 		 Security) encryption
+	d)To establish a secure and encrypted connection between mail servers ,we will enable STARTTLS(Secure Transport Layer Security) encryption
 	smtp_use_tls = yes
 	
 	e)to specify the path of CA certificates
 	smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
 
 Step 9:Enable and start postfix
+
 	sudo systemctl enable postfix
   	sudo systemctl start postfix
   	
